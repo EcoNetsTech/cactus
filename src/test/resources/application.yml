@@ -1,0 +1,30 @@
+spring:
+  config:
+    import: optional:file:.env/db.properties
+
+cactus:
+  # 文件输出路径
+  output-dir: generate
+  # 作者名称
+  author: ximu
+  # 是否覆盖已有文件
+  file-override: true
+  # 是否自动打开文件
+  open: true
+
+  datasource:
+    type: mysql
+    url: jdbc:mysql://${HOST}:3306/x-mtn?nullNamePatternMatchesAll=true&useSSL=false&useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=GMT%2B8
+    driverName: com.mysql.cj.jdbc.Driver
+    username: ${USERNAME}
+    password: ${PASSWORD}
+
+  table:
+    # 包名 com.example
+    packages: com.ximu.service.domain
+    # 模块名  domain.resource
+    modules: store
+    # 表名称  sys_bill
+    tableName: store_info
+    # 表前缀  sys_
+    prefix:

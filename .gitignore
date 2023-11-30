@@ -1,0 +1,12 @@
+*.settings/
+*target/
+generate/
+*.svn/
+*.project
+*.classpath
+.DS_Store
+.idea/
+*.iml
+temp
+**/pom.xml.releaseBackup
+.env/
