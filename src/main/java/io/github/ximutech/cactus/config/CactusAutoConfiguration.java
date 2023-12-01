@@ -20,16 +20,16 @@ public class CactusAutoConfiguration {
     }
 
     @Bean
+    public SpringContextHolder springContextHolder(){
+        return new SpringContextHolder();
+    }
+
+    @Bean
     @ConditionalOnMissingBean
     public CactusConfigBean cactusConfigBean(){
         CactusConfigBean cactusConfigBean = new CactusConfigBean(cactusProperties);
 
         return cactusConfigBean;
-    }
-
-    @Bean
-    public SpringContextHolder springContextHolder(){
-        return new SpringContextHolder();
     }
 
 }
