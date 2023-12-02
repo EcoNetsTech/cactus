@@ -1,5 +1,6 @@
 package io.github.ximutech.cactus.config;
 
+import io.github.ximutech.cactus.CactusGenerator;
 import io.github.ximutech.cactus.util.SpringContextHolder;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -25,11 +26,16 @@ public class CactusAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
     public CactusConfigBean cactusConfigBean(){
         CactusConfigBean cactusConfigBean = new CactusConfigBean(cactusProperties);
 
         return cactusConfigBean;
     }
+
+    @Bean
+    public CactusGenerator cactusGenerator(){
+        return new CactusGenerator();
+    }
+
 
 }
