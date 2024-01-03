@@ -14,18 +14,25 @@ import io.github.ximutech.cactus.config.CactusProperties;
 import io.github.ximutech.cactus.config.DatasourceProperty;
 import io.github.ximutech.cactus.config.TableProperty;
 import io.github.ximutech.cactus.util.SpringContextHolder;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import java.util.*;
 
 /**
  * @author ximu
  */
-public class CactusGenerator  {
+public class CactusGenerator {
 
-    private CactusConfigBean cactusConfigBean;
+
+    private CactusProperties cactusProperties;
+
+    public CactusGenerator(CactusProperties cactusProperties){
+        this.cactusProperties = cactusProperties;
+    }
 
     public void execute(){
-        cactusConfigBean = SpringContextHolder.getBean(CactusConfigBean.class);
 
         // 代码生成器
         AutoGenerator mpg = new AutoGenerator();
@@ -60,7 +67,6 @@ public class CactusGenerator  {
 
     // 构建全局配置
     private void buildGlobalConfig(AutoGenerator mpg) {
-        CactusProperties cactusProperties = cactusConfigBean.getCactusProperties();
 
         GlobalConfig gc = new GlobalConfig()
                 // 是否覆盖已有文件
@@ -88,7 +94,7 @@ public class CactusGenerator  {
 
     // 构建数据库配置
     private void buildDatasource(AutoGenerator mpg) {
-        DatasourceProperty datasource = cactusConfigBean.getCactusProperties().getDatasource();
+        DatasourceProperty datasource = cactusProperties.getDatasource();
 
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setUrl(datasource.getUrl())
@@ -101,7 +107,7 @@ public class CactusGenerator  {
 
     // 构建策略配置
     private void buildStrategyConfig(AutoGenerator mpg){
-        TableProperty table = cactusConfigBean.getCactusProperties().getTable();
+        TableProperty table = cactusProperties.getTable();
 
         // 包配置
         PackageConfig pc = new PackageConfig();
@@ -146,7 +152,7 @@ public class CactusGenerator  {
 
     // 构建模板配置
     private void buildTemplate(AutoGenerator mpg) {
-        TableProperty table = cactusConfigBean.getCactusProperties().getTable();
+        TableProperty table = cactusProperties.getTable();
         // 注入自定义配置，可以在 VM 中使用 cfg.abc 【可无】  ${cfg.abc}
         final String parent = mpg.getPackageInfo().getParent();
 
@@ -179,7 +185,6 @@ public class CactusGenerator  {
         mpg.setCfg(config);
     }
     private void generDTO(List<FileOutConfig> focList) {
-        CactusProperties cactusProperties = cactusConfigBean.getCactusProperties();
         TableProperty table = cactusProperties.getTable();
 
         String modules = Optional.ofNullable(table.getModules()).orElse("");
@@ -202,7 +207,6 @@ public class CactusGenerator  {
     }
 
     private void generRequest(List<FileOutConfig> focList) {
-        CactusProperties cactusProperties = cactusConfigBean.getCactusProperties();
         TableProperty table = cactusProperties.getTable();
 
         String modules = Optional.ofNullable(table.getModules()).orElse("");
@@ -225,7 +229,6 @@ public class CactusGenerator  {
     }
 
     private void generXml(List<FileOutConfig> focList) {
-        CactusProperties cactusProperties = cactusConfigBean.getCactusProperties();
         TableProperty table = cactusProperties.getTable();
 
         focList.add(new FileOutConfig("/default/simple/mapper.xml.ftl") {
@@ -262,5 +265,4 @@ public class CactusGenerator  {
     private String getOutputFile(String outputFile){
         return outputFile.endsWith("/") ? outputFile : outputFile + "/";
     }
-
 }
